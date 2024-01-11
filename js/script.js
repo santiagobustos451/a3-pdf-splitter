@@ -8,20 +8,26 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 let fileInput = (() => {
     let inputEl;
     let viewer;
+    let resultViewer;
     let pages = [];
 
     let init = () => {
         cacheDom();
+        resetIframes();
         bindEvents();
     }
     let cacheDom = () => {
         inputEl = document.getElementById('input-pdf');
         viewer = document.getElementById('viewer');
+        resultViewer = document.getElementById('result-viewer');
     }
     let bindEvents = () => {
         inputEl.addEventListener('change', loadFile);
     }
-
+    let resetIframes = () => {
+        viewer.src = 'about:blank';
+        resultViewer.src = 'about:blank';
+    }
     let loadFile = (e) => {
 
         const file = e.target.files[0];
@@ -75,7 +81,7 @@ let fileInput = (() => {
         reader.readAsArrayBuffer(file);
     }
 
-    return {init, pages}
+    return {init, pages, viewer}
 })();
 
 let pageSplitter = (() => {
