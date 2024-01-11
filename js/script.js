@@ -144,8 +144,6 @@ let pageSplitter = (() => {
 
         const blob = outputPdf.output('blob');
 
-        console.log('been there done that');
-
         resultViewer.src = URL.createObjectURL(blob);
 
         outputPages = [];
