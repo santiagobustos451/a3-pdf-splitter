@@ -5,10 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./js/script.js" defer></script>
-    <title>Untitled Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script type="module" src="./js/script.js" defer></script>
+    <title>Split PDF</title>
 </head>
 <body>
-    
+    <div class="gui">
+        <div class="frame-container">
+            <form action="">
+                <input type="file" name="PDF File" id="input-pdf">
+            </form>
+            <iframe class="inactive" id="viewer" src="" frameborder="0"></iframe>
+        </div>
+        <button id="split-button" class="disabled">Dividir</button>
+        <div class="frame-container">
+            <img class="loading inactive" src="img/loading.gif" alt="loading">
+            <iframe class="" id="result-viewer" src="" frameborder="0"></iframe>
+        </div>
+    </div>
 </body>
 </html>
