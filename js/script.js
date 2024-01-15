@@ -44,13 +44,16 @@ let fileInput = (() => {
 
             viewer.classList.remove('inactive');
 
-            pdfjsLib.getDocument(url).promise.then(pdf => {
+            pdfjsLib.getDocument(url).promise.then(async pdf => {
                 const totalPages = pdf.numPages;
       
                 console.log(`The pdf has ${totalPages} pages.`);
 
+                let pageLoads = [];
+
                 for(let pageNumber = 1; pageNumber <= totalPages; pageNumber++){
-                    pdf.getPage(pageNumber).then(page => {
+                    pageLoads.push(pdf.getPage(pageNumber));
+                    pdf.getPage(pageNumber).then(async page => {
                         const scale = 1.5;
                         const viewport = page.getViewport({scale});
 
@@ -64,15 +67,16 @@ let fileInput = (() => {
                             viewport: viewport,
                         };
 
-                        page.render(renderContext).promise.then(() => {
+                        await page.render(renderContext).promise.then(() => {
                             const pageData = canvas.toDataURL('image/png');
                             pages[pageNumber - 1] = (pageData);
                         })
                     })
                 }
 
+                setTimeout(() => {document.querySelector("#split-button").classList.remove('disabled');}, 1000)
+
                 //put this in the correct place later
-                document.querySelector("#split-button").classList.remove('disabled');
                 inputEl.classList.add('loaded');
                 //--------------------------
               });
@@ -88,7 +92,6 @@ let pageSplitter = (() => {
     let splitButton;
     let resultViewer;
     let loadingWheel;
-    let example;
     let outputPdf;
     let outputPages = [];
 
@@ -99,7 +102,6 @@ let pageSplitter = (() => {
     let cacheDom = () => {
         splitButton = document.getElementById('split-button');
         resultViewer = document.getElementById('result-viewer');
-        example = document.getElementById('example');
         loadingWheel = document.querySelector('.loading');
     }
     let bindEvents = () => {
@@ -111,6 +113,8 @@ let pageSplitter = (() => {
         });
         let pages = fileInput.pages;
         let imgLoads = [];
+
+        resultViewer.src = 'about:blank'
 
         loadingWheel.classList.remove('inactive');
 
